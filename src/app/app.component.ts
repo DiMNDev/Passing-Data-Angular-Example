@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
@@ -10,8 +10,8 @@ import { HomeComponent } from './home/home.component';
 })
 export class AppComponent implements OnInit {
   title = 'passing-data-assigment';
-  messageForHome: string = '';
+  messageForHome = signal<string>('');
   ngOnInit(): void {
-    this.messageForHome = 'I am coming from the app component';
+    this.messageForHome.set('I am coming from the app component');
   }
 }
