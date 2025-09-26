@@ -88,3 +88,11 @@ export class HomeComponent { //<--The export of the child component to be import
 ```
 
 _Note: When using the cli tool to generate components you shouldn't need to worry too much about explicitly naming them. The tool will name them for you in this convention. Just draw the conclusion that [Export, Import] and [Selector, HTML] reference each other in this way._
+
+## Pick Your Implementation Flavor
+
+There are two different ways to implement passing data between components. They leverage different methods in the Angular framework. It may be beneficial to know both methods so you aren't caught off guard when you come accross either/or.
+
+|                                                                      Classic Version                                                                      |                                                                     Modern Version                                                                      |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [![Classic](https://img.shields.io/badge/Example-Classic-blue?style=for-the-badge)](https://github.com/DiMNDev/Passing-Data-Angular-Example/tree/classic) | [![Modern](https://img.shields.io/badge/Example-Modern-green?style=for-the-badge)](https://github.com/DiMNDev/Passing-Data-Angular-Example/tree/modern) |
