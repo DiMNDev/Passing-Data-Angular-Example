@@ -1,59 +1,90 @@
-# PassingDataAssigment
+# Passing Data between Child & Parent Components
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
+### Creating New Components
 
-## Development server
+It is recommended to use the cli tool to create new components. This creates four new files:
 
-To start a local development server, run:
+Create a component using `ng generate component <component-name>`
+_Note: shorthand command syntax: `ng g c <component-name>`_
 
-```bash
-ng serve
+- HTML Markup - `*.component.html`
+- Styling - `*.component.scss` (or your own flavor of CSS)
+- Tests - `*.component.spec.ts`
+- Logic - `*.component.ts`
+
+### Component Definition
+
+When you use the cli tool to generate components, **Angular** provides the boiler plate code for us.
+Example:
+Run `ng g c home`
+
+```TypeScript
+/// home.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  imports: [],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss'
+})
+export class HomeComponent {
+
+}
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Implementing New Components
 
-## Code scaffolding
+Creating components helps us to keep our application modular, allowing us to break up the building blocks into _single purpose_ functionality. This pattern helps to maintain the application as it scales by keeping logic relative to the component that uses it.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+To use a component, we decide where we would like to use it. In this example, we will add the _home_ component in the root of the application.
+To do this:
 
-```bash
-ng generate component component-name
+1. Add the import to the root (or other _parent_ component)
+
+```TypeScript
+/// app.component.ts
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { HomeComponent } from './home/home.component'; // <--Added import for the home component here
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, HomeComponent], // <--Injected imported component here
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
+})
+export class AppComponent {
+  title = 'passing-data-assigment';
+}
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+2. Use the _child_ component in the _parent_
 
-```bash
-ng generate --help
+```HTML
+/// app.component.html
+<main class="main">
+  <app-home></app-home> <!--Added the child component here-->
+</main>
+
+<router-outlet />
 ```
 
-## Building
+_Note: The naming of the components might be confusing. To clear it up, here is an example of where those names come from._
 
-To build the project run:
+```TypeScript
+/// home.component.ts
+import { Component } from '@angular/core';
 
-```bash
-ng build
+@Component({
+  selector: 'app-home', //<--The selector used to reference the child component in the parent component HTML
+  imports: [],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss'
+})
+export class HomeComponent { //<--The export of the child component to be imported and injected into the parent component
+
+}
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+_Note: When using the cli tool to generate components you shouldn't need to worry too much about explicitly naming them. The tool will name them for you in this convention. Just draw the conclusion that [Export, Import] and [Selector, HTML] reference each other in this way._
