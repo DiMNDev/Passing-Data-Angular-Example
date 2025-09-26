@@ -1,90 +1,78 @@
-# Passing Data between Child & Parent Components
+# Classic Version
 
-### Creating New Components
+There are two ways we can pass data into child components. Here we will explore the classic version. In the first two steps [1,2] we will update the logic, and the following two steps [3,4] we will look at the markup for implementing the logic for passing the data.
 
-It is recommended to use the cli tool to create new components. This creates four new files:
+#### 1. Parent Component Logic
 
-Create a component using `ng generate component <component-name>`
-_Note: shorthand command syntax: `ng g c <component-name>`_
-
-- HTML Markup - `*.component.html`
-- Styling - `*.component.scss` (or your own flavor of CSS)
-- Tests - `*.component.spec.ts`
-- Logic - `*.component.ts`
-
-### Component Definition
-
-When you use the cli tool to generate components, **Angular** provides the boiler plate code for us.
-Example:
-Run `ng g c home`
-
-```TypeScript
-/// home.component.ts
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-home',
-  imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
-})
-export class HomeComponent {
-
-}
-```
-
-### Implementing New Components
-
-Creating components helps us to keep our application modular, allowing us to break up the building blocks into _single purpose_ functionality. This pattern helps to maintain the application as it scales by keeping logic relative to the component that uses it.
-
-To use a component, we decide where we would like to use it. In this example, we will add the _home_ component in the root of the application.
-To do this:
-
-1. Add the import to the root (or other _parent_ component)
+In the classic version, we will first define `messageForHome: string` that will then be updated using the `ngOnInit()` method. Here's the code sample.
 
 ```TypeScript
 /// app.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // <--Update the import to access `OnInit`
 import { RouterOutlet } from '@angular/router';
-import { HomeComponent } from './home/home.component'; // <--Added import for the home component here
+import { HomeComponent } from './home/home.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent], // <--Injected imported component here
+  imports: [RouterOutlet, HomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit { // <--Tell `AppComponent` we will implement OnInit
   title = 'passing-data-assigment';
+  messageForHome: string = ''; // <--Initialize an empty string that will be passed down to the child
+
+  ngOnInit(): void { // <----------------------------------------------------Implement `ngOnInit()` method
+    this.messageForHome = 'I am coming from the app component';  // <--Update the message when AppComponent is intialized.
+  }  // <--------------------------------------------------------------------
 }
 ```
 
-2. Use the _child_ component in the _parent_
+#### 2. Child Component Logic
+
+Using `@Input()` tells Angular that we want to be expecting to inherit this data from the parent component. This is a key to the classic passing of data between parent and child components.
+
+```TypeScript
+/// home.component.ts
+import { Component, Input } from '@angular/core'; // <--Update the import to access `Input`
+import { BodyComponent } from '../body/body.component';
+
+@Component({
+  selector: 'app-home',
+  imports: [BodyComponent],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
+})
+export class HomeComponent {
+  @Input() messageFromApp: string = ''; // <--Tells the home component 'expect to inherit this from the parent'
+}
+```
+
+#### 3. Parent Component Markup
+
+Here we will pass the data as an attribute into the child component. Here's the example:
 
 ```HTML
-/// app.component.html
+<!-- app.component.html -->
 <main class="main">
-  <app-home></app-home> <!--Added the child component here-->
+  <app-home [messageFromApp]="messageForHome"></app-home>
 </main>
 
 <router-outlet />
 ```
 
-_Note: The naming of the components might be confusing. To clear it up, here is an example of where those names come from._
+#### 4. Child Component Markup
 
-```TypeScript
-/// home.component.ts
-import { Component } from '@angular/core';
+Now that our _app_ component is passing the message into our _home_ component we can now access that data inside our child component and display it in our HTML. Here's the code:
 
-@Component({
-  selector: 'app-home', //<--The selector used to reference the child component in the parent component HTML
-  imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
-})
-export class HomeComponent { //<--The export of the child component to be imported and injected into the parent component
-
-}
+```HTML
+<div>
+  <p>Home Component: {{ messageFromApp }}</p>
+  <app-body></app-body>
+</div>
 ```
 
-_Note: When using the cli tool to generate components you shouldn't need to worry too much about explicitly naming them. The tool will name them for you in this convention. Just draw the conclusion that [Export, Import] and [Selector, HTML] reference each other in this way._
+Now run the application, `ng server --open`, and now the message should be displayed on screen using the classic style of passing data between a parent and a child component.
+
+[Checkout Modern](https://github.com/DiMNDev/Passing-Data-Angular-Example/tree/modern)
+[Back to main](https://github.com/DiMNDev/Passing-Data-Angular-Example/tree/main)
