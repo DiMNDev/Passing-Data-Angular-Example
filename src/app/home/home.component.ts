@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, InputSignal } from '@angular/core';
 import { BodyComponent } from '../body/body.component';
 
 @Component({
@@ -8,5 +8,5 @@ import { BodyComponent } from '../body/body.component';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  @Input() messageFromApp: string = '';
+  messageFromApp: InputSignal<string> = input<string>('');
 }
