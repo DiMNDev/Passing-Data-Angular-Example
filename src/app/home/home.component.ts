@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BodyComponent } from '../body/body.component';
 
 @Component({
@@ -7,4 +7,6 @@ import { BodyComponent } from '../body/body.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  @Input() messageFromApp: string = '';
+}
