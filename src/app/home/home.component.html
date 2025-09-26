@@ -1,4 +1,7 @@
 <div>
   <p>Home Component: {{ messageFromApp() }}</p>
-  <app-body></app-body>
+  <app-body
+    [messageFromHome]="messageToBody()"
+    (callAlertFromHome)="callAlert($event)"
+  ></app-body>
 </div>
